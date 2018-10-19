@@ -28,7 +28,7 @@ and then
   mimi decrypt -p password -i filename.extension.encrypted
 ```
 
-I haven't figured out how to get a valid initialization vector and key working yet, so if you also don't know how to supply those variables, the cli interface will give you a warning.  If you know how to make the initialization vector work well, please issue a pull request and I will try to add your contributions as soon as possible.
+I haven't figured out how to get a valid initialization vector and key working yet, so if you also don't know how to supply those variables, the cli interface will give you a warning.  If you know how to make the initialization vector work well, please issue a pull request and I will try to add your contributions as soon as possible.  I actually have gotten it working, I just am not sure how best to share really long keys and ivs.  I wrote another library that uses literature to encrypt, but I haven't finished that one and need a simple cli interface sooner than I'll be able to finish that particular project.
 
 Contributing
 ------------
