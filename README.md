@@ -11,6 +11,12 @@ or on mac
 sudo npm install kepa-de-mini -g
 ```
 
+or if npmjs.com isn't working right
+```bash
+git clone https://github.com/ballantyne/kepa-de-mimi.git
+sudo npm install kepa-de-mimi/ -g
+```
+
 and then
 
 ```bash
