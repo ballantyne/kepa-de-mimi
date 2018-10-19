@@ -1,0 +1,25 @@
+{
+  "name": "kepa-de-mimi",
+  "version": "1.0.0",
+  "description": "streaming file encryption and decryption",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "bin" : { "mimi" : "./bin/mimi.js" },
+  "keywords": [
+    "file",
+    "encryption",
+    "cli"
+  ],
+  "author": "Scott Ballantyne",
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0"
+  },
+  "dependencies": {
+    "commander": "^2.19.0",
+    "inquirer": "^6.2.0"
+  }
+}
