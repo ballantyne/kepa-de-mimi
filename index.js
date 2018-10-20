@@ -21,6 +21,24 @@ var logMessage = function(message) {
   }
 }
 
+var determineInputPath = function(filePath) {
+  if (fs.existsSync(filePath)) {
+    return filePath;
+  } else if (fs.existsSync(path.join(process.cwd(), filePath))) {
+    return path.join(process.cwd(), filePath);
+  } else if (fs.existsSync(filePath)) {
+    return filePath;
+  } 
+}
+
+var ensureOutputPath = function(filePath) {
+  if (filePath.indexOf('/') == -1 || filePath.indexOf("\\") == -1) {
+    return path.join(process.cwd(), filePath);
+  } else {
+    return filePath;
+  }
+}
+
 module.exports.encrypt = function(password, input, output, vector) {
   var encrypt;
   if (vector != undefined) {
@@ -31,15 +49,15 @@ module.exports.encrypt = function(password, input, output, vector) {
     encrypt = crypto.createCipher(algorithm, password);
   }
   
-  var r = fs.createReadStream(path.join(process.cwd(), input));
+  var readable = fs.createReadStream(determineInputPath(input));
   var zip = zlib.createGzip();
-  var w = fs.createWriteStream(path.join(process.cwd(), output));
+  var writeable = fs.createWriteStream(ensureOutputPath(output));
   
-  w.on('finish', () => {
+  writeable.on('finish', () => {
     logMessage([input, 'encrypted as', output]);
   });
   
-  r.pipe(zip).pipe(encrypt).pipe(w);
+  readable.pipe(zip).pipe(encrypt).pipe(writeable);
 }
 
 module.exports.decrypt = function(password, input, output, vector) {
@@ -52,15 +70,15 @@ module.exports.decrypt = function(password, input, output, vector) {
     decrypt = crypto.createDecipher(algorithm, password);
   }
   
-  var r = fs.createReadStream(path.join(process.cwd(), input));
+  var readable = fs.createReadStream(determineInputPath(input));
   var unzip = zlib.createGunzip();
-  var w = fs.createWriteStream(path.join(process.cwd(), output));
+  var writeable = fs.createWriteStream(ensureOutputPath(output));
 
-  w.on('finish', () => {
+  writeable.on('finish', () => {
     logMessage([input, 'decrypted to', output]);
   });
  
-  r.pipe(decrypt).pipe(unzip).pipe(w);
+  readable.pipe(decrypt).pipe(unzip).pipe(writeable);
 }
 
 
