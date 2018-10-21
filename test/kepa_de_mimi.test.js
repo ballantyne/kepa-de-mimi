@@ -25,9 +25,19 @@ describe('Mimi', function () {
 
 
     it('should encrypt and decrypt earth secret using vector', function (done) {
-      Mimi.encrypt("test", 'test/data/earth-secret.txt', 'test/data/earth-secret.txt.encrypted', 'v');
+      Mimi.encrypt({
+        input: 'test/data/earth-secret.txt', 
+        output: 'test/data/earth-secret.txt.encrypted', 
+        password: 'test', 
+        vector: 'v'
+      });
       setTimeout(function() {
-        Mimi.decrypt("test", 'test/data/earth-secret.txt.encrypted', 'test/data/earth-secret.txt.result', 'v');
+        Mimi.decrypt({
+          input: 'test/data/earth-secret.txt.encrypted', 
+          output: 'test/data/earth-secret.txt.result', 
+          password: 'test', 
+          vector: 'v'
+        });
         setTimeout(function() {
           var file = readNewFile('earth-secret.txt.result');
           var encryptedFile = readNewFile('earth-secret.txt.encrypted');
@@ -42,9 +52,19 @@ describe('Mimi', function () {
     });
 
     it('should encrypt and decrypt sun secreti using vector', function (done) {
-      Mimi.encrypt("test", 'test/data/sun-secret.txt', 'test/data/sun-secret.txt.encrypted', 'v');
+      Mimi.encrypt({
+        input: 'test/data/sun-secret.txt', 
+        output: 'test/data/sun-secret.txt.encrypted', 
+        password: 'test', 
+        vector: 'v'
+      });
       setTimeout(function() {
-        Mimi.decrypt("test", 'test/data/sun-secret.txt.encrypted', 'test/data/sun-secret.txt.result', 'v');
+        Mimi.decrypt({
+          input: 'test/data/sun-secret.txt.encrypted', 
+          output: 'test/data/sun-secret.txt.result', 
+          password: 'test', 
+          vector: 'v'
+        });
         setTimeout(function() {
           var file = readNewFile('sun-secret.txt.result');
           var encryptedFile = readNewFile('sun-secret.txt.encrypted');
@@ -58,9 +78,19 @@ describe('Mimi', function () {
     });
 
     it('should encrypt and decrypt moon secret using vector', function (done) {
-      Mimi.encrypt("test", 'test/data/moon-secret.txt', 'test/data/moon-secret.txt.encrypted', 'v');
+      Mimi.encrypt({
+        input: 'test/data/moon-secret.txt', 
+        output: 'test/data/moon-secret.txt.encrypted', 
+        password: 'test', 
+        vector: 'v'
+      });
       setTimeout(function() {
-        Mimi.decrypt("test", 'test/data/moon-secret.txt.encrypted', 'test/data/moon-secret.txt.result', 'v');
+        Mimi.decrypt({
+          input: 'test/data/moon-secret.txt.encrypted', 
+          output: 'test/data/moon-secret.txt.result', 
+          password: 'test', 
+          vector: 'v'
+        });
         setTimeout(function() {
           var file = readNewFile('moon-secret.txt.result');
           var encryptedFile = readNewFile('moon-secret.txt.encrypted');
@@ -74,9 +104,17 @@ describe('Mimi', function () {
     });
 
     it('should encrypt and decrypt earth secret without vector', function (done) {
-      Mimi.encrypt("test", 'test/data/earth-secret.txt', 'test/data/earth-secret.txt.encrypted');
+      Mimi.encrypt({
+        input: 'test/data/earth-secret.txt', 
+        output: 'test/data/earth-secret.txt.encrypted', 
+        password: 'test'
+      });
       setTimeout(function() {
-        Mimi.decrypt("test", 'test/data/earth-secret.txt.encrypted', 'test/data/earth-secret.txt.result');
+        Mimi.decrypt({
+          input: 'test/data/earth-secret.txt.encrypted', 
+          output: 'test/data/earth-secret.txt.result', 
+          password: 'test'
+        });
         setTimeout(function() {
           var file = readNewFile('earth-secret.txt.result');
           var encryptedFile = readNewFile('earth-secret.txt.encrypted');
@@ -90,9 +128,17 @@ describe('Mimi', function () {
     });
 
     it('should encrypt and decrypt sun secret without vector', function (done) {
-      Mimi.encrypt("test", 'test/data/sun-secret.txt', 'test/data/sun-secret.txt.encrypted');
+      Mimi.encrypt({
+        input: 'test/data/sun-secret.txt', 
+        output: 'test/data/sun-secret.txt.encrypted', 
+        password: 'test'
+      });
       setTimeout(function() {
-        Mimi.decrypt("test", 'test/data/sun-secret.txt.encrypted', 'test/data/sun-secret.txt.result');
+        Mimi.decrypt({
+          input: 'test/data/sun-secret.txt.encrypted', 
+          output: 'test/data/sun-secret.txt.result', 
+          password: 'test'
+        });
         setTimeout(function() {
           var file = readNewFile('sun-secret.txt.result');
           var encryptedFile = readNewFile('sun-secret.txt.encrypted');
@@ -106,9 +152,17 @@ describe('Mimi', function () {
     });
 
     it('should encrypt and decrypt moon secret without vector', function (done) {
-      Mimi.encrypt("test", 'test/data/moon-secret.txt', 'test/data/moon-secret.txt.encrypted');
+      Mimi.encrypt({
+        input: 'test/data/moon-secret.txt', 
+        output: 'test/data/moon-secret.txt.encrypted', 
+        password: 'test'
+      });
       setTimeout(function() {
-        Mimi.decrypt("test", 'test/data/moon-secret.txt.encrypted', 'test/data/moon-secret.txt.result');
+        Mimi.decrypt({
+          input: 'test/data/moon-secret.txt.encrypted', 
+          output: 'test/data/moon-secret.txt.result', 
+          password: 'test'
+        });
         setTimeout(function() {
           var file = readNewFile('moon-secret.txt.result');
           var encryptedFile = readNewFile('moon-secret.txt.encrypted');

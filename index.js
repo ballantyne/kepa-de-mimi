@@ -4,6 +4,7 @@ var path = require('path'),
 
 var fs = require('fs');
 var zlib = require('zlib');
+var through = require('through');
 
 var hashify = function(password, vector) {
   return crypto.createHmac('sha256', password)
@@ -39,46 +40,97 @@ var ensureOutputPath = function(filePath) {
   }
 }
 
-module.exports.encrypt = function(password, input, output, vector) {
-  var encrypt;
-  if (vector != undefined) {
-    vector = hashify(password, vector).slice(0, 16);
-    password = hashify(password, vector).slice(0, 32);
-    encrypt = crypto.createCipheriv(algorithm, password, vector);
-  } else {
-    encrypt = crypto.createCipher(algorithm, password);
-  }
+module.exports.encrypt = function(options) {
   
-  var readable = fs.createReadStream(determineInputPath(input));
+  //console.log(JSON.stringify(options, null, 2));
+  
+  var encrypt, readable, writeable;
   var zip = zlib.createGzip();
-  var writeable = fs.createWriteStream(ensureOutputPath(output));
   
-  writeable.on('finish', () => {
-    logMessage([input, 'encrypted as', output]);
+  var stream = new through(function(data){
+    this.queue(data);
   });
   
+  if (options.algorithm == undefined) {
+    options.algorithm = algorithm;
+  }
+
+  if (options.vector != undefined) {
+    options.vector = hashify(options.password, options.vector).slice(0, 16);
+    options.password = hashify(options.password, options.vector).slice(0, 32);
+    encrypt = crypto.createCipheriv(options.algorithm, options.password, options.vector);
+  } else {
+    encrypt = crypto.createCipher(options.algorithm, options.password);
+  }
+  
+  if (typeof options.input == 'string') {
+    var readable = fs.createReadStream(determineInputPath(options.input));
+  } else {
+    var readable = options.input;
+  }
+ 
+  if (typeof options.output == 'string') {
+    writeable = fs.createWriteStream(ensureOutputPath(options.output));
+  } else {
+    writeable = options.output;
+  } 
+ 
   readable.pipe(zip).pipe(encrypt).pipe(writeable);
+  
+  if (typeof options.output == 'string') {
+    stream.pipe(writeable);
+  }
+  
+  if (options.stdout) {
+    stream.pipe(process.stdout);
+  }
+  return stream;
 }
 
-module.exports.decrypt = function(password, input, output, vector) {
-  var decrypt;
-  if (vector != undefined) {
-    vector = hashify(password, vector).slice(0, 16);
-    password = hashify(password, vector).slice(0, 32);
-    decrypt = crypto.createDecipheriv(algorithm, password, vector);
-  } else {
-    decrypt = crypto.createDecipher(algorithm, password);
+module.exports.decrypt = function(options) {
+  //console.log(JSON.stringify(options, null, 2));
+  
+  var decrypt, readable, writeable;
+  var unzip = zlib.createGunzip();
+  
+  var stream = new through(function(data){
+    this.queue(data);
+  });
+  
+  if (options.algorithm == undefined) {
+    options.algorithm = algorithm;
   }
   
-  var readable = fs.createReadStream(determineInputPath(input));
-  var unzip = zlib.createGunzip();
-  var writeable = fs.createWriteStream(ensureOutputPath(output));
+  if (options.vector != undefined) {
+    options.vector = hashify(options.password, options.vector).slice(0, 16);
+    options.password = hashify(options.password, options.vector).slice(0, 32);
+    decrypt = crypto.createDecipheriv(options.algorithm, options.password, options.vector);
+  } else {
+    decrypt = crypto.createDecipher(options.algorithm, options.password);
+  }
+  
+  if (typeof options.input == 'string') {
+    readable = fs.createReadStream(determineInputPath(options.input));
+  } else {
+    readable = options.input;
+  } 
+  
+  if (typeof options.output == 'string') {
+    writeable = fs.createWriteStream(ensureOutputPath(options.output));
+  } else {
+    writeable = options.output;
+  } 
 
-  writeable.on('finish', () => {
-    logMessage([input, 'decrypted to', output]);
-  });
- 
-  readable.pipe(decrypt).pipe(unzip).pipe(writeable);
+  readable.pipe(decrypt).pipe(unzip).pipe(stream);
+  
+  if (typeof options.output == 'string') {
+    stream.pipe(writeable);
+  }
+  
+  if (options.stdout) {
+    stream.pipe(process.stdout);
+  }
+  return stream;
 }
 
 

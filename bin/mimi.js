@@ -10,28 +10,51 @@ var program = require('commander');
  
 program
   .version('0.1.0')
+  .usage('command [options]')
   .option('-i, --input <input>', 'Input File')
   .option('-o, --output <output>', 'Output File')
   .option('-p, --password <password>', 'Password')
   .option('-v, --vector <vector>', 'Initialization Vector')
+  .option('-a, --algorithm <algorithm>', 'Algorithm')
+  .option('-O, --stdout', 'Pipe to Standard Output')
+ 
   .parse(process.argv);
 
-var output;
+var output, input;
 
 if (program.args[0] == 'encrypt') {
+  if (program.input == undefined) {
+    input = process.stdin;
+  } else {
+    input = program.input;
+  }
+  
   if (program.output == undefined) {
-    output = [program.input, '.encrypted'].join('');
+    if (program.stdout) {
+      output = process.stdout;
+    } else {
+      output = [program.input, '.encrypted'].join('');
+    }
   } else {
     output = program.output;
   }
-  Mimi.encrypt(program.password, program.input, output, program.vector);
+  Mimi.encrypt({input: input, output: output, password: program.password, vector: program.vector, stdout: program.stdout});
 }
 
 if (program.args[0] == 'decrypt') {
+  if (program.input == undefined) {
+    input = process.stdin;
+  } else {
+    input = program.input;
+  }
   if (program.output == undefined) {
-    output = program.input.replace('.encrypted', '');
+    if (program.stdout) {
+      output = process.stdout;
+    } else {
+      output = program.input.replace('.encrypted', '');
+    }
   } else {
     output = program.output;
   }
-  Mimi.decrypt(program.password, program.input, output, program.vector);
+  Mimi.decrypt({input: input, output: output, password: program.password, vector: program.vector, stdout: program.stdout});
 }
