@@ -19,7 +19,6 @@ program
   .option('-v, --vector <vector>', 'Initialization Vector')
   .option('-a, --algorithm <algorithm>', 'Algorithm')
   .option('-O, --stdout', 'Pipe to Standard Output')
- 
   .parse(process.argv);
 
 var output, input;
@@ -40,15 +39,24 @@ if (program.args[0] == 'encrypt') {
   } else {
     output = program.output;
   }
-  Mimi.encrypt({input: input, output: output, password: program.password, vector: program.vector, stdout: program.stdout});
+  
+  Mimi.encrypt({
+    input: input, 
+    output: output, 
+    password: program.password, 
+    vector: program.vector, 
+    stdout: program.stdout
+  });
 }
 
 if (program.args[0] == 'decrypt') {
+  
   if (program.input == undefined) {
     input = process.stdin;
   } else {
     input = program.input;
   }
+  
   if (program.output == undefined) {
     if (program.stdout) {
       output = process.stdout;
@@ -58,5 +66,12 @@ if (program.args[0] == 'decrypt') {
   } else {
     output = program.output;
   }
-  Mimi.decrypt({input: input, output: output, password: program.password, vector: program.vector, stdout: program.stdout});
+  
+  Mimi.decrypt({
+    input: input, 
+    output: output, 
+    password: program.password, 
+    vector: program.vector, 
+    stdout: program.stdout
+  });
 }
