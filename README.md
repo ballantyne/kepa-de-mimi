@@ -1,4 +1,4 @@
-kepa-de-mimi
+kepa-de-mimi (可怕的秘密)
 =========
 
 Streaming file encryption and decryption command line interface that is useful for encrypting and decrypting large files very quickly.
