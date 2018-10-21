@@ -7,7 +7,9 @@
 const path = require('path');
 var Mimi = require(path.join(__dirname, '..', 'index'));
 var program = require('commander');
- 
+
+process.env.NODE_NO_WARNINGS = '1';
+
 program
   .version('0.1.0')
   .usage('command [options]')

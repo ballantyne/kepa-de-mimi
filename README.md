@@ -42,10 +42,14 @@ I have also added the ability to pipe data to and from and also redirect from mi
 
 ```bash
   cat filename.extension | mimi encrypt -p password -O >> filename.extension.encrypted
+
+  cat filename.extension.encrypted | mimi decrypt -p password -O >> filename.extension
+
 ```
 
 The library can also take a readable stream and it returns the a stream that can pipe to a writeable stream, so you could take the stream that a web server provides and encrypt and directly pipe to s3.  I think that I have done this in other code, but I haven't looked at that code recently, so if you get code that does that working let me know.
 
+If you are piping to stdout, you should be sure to use the vector options otherwise node.js will show a warning and it will be in the stdout.
 
 Contributing
 ------------
