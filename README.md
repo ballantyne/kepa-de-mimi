@@ -51,6 +51,8 @@ The library can also take a readable stream and it returns the a stream that can
 
 If you are piping to stdout, you should be sure to use the vector options otherwise node.js will show a warning and it will be in the stdout.
 
+Strange, github didn't update when I pushed that.  Does a rebase not show up as the current version?
+
 Contributing
 ------------
 
