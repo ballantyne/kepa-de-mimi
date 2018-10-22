@@ -50,7 +50,7 @@ I have also added the ability to pipe data to and from and also redirect from mi
 Here is an example of an express router for uploading directly to a server from mimi cli using the -u or --url option.  If you think that this should be handled differently, please feel free to let me know.
 
 ```bash 
-cat large_file.extension | mimi encrypt -p testtesttest -u http://localhost:3000/upload/large_file.extension.mimi
+cat large_file.extension | mimi encrypt -p testtesttest -u http://localhost:3000/upload/a_really_long_api_key/large_file.extension.mimi
 ```
 
 ```javavscript
@@ -59,7 +59,7 @@ var router = express.Router();
 var fs = require('fs');
 var path = require('path');
 
-router.post('/upload/:filename', function(req, res, next) {
+router.post('/upload/api_key/:filename', function(req, res, next) {
   var writeable = fs.createWriteStream(path.join(__dirname, '..', 'public', 'uploads', req.params.filename));
   req.pipe(writeable);
 
