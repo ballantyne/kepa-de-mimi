@@ -26,7 +26,7 @@ and then
 ```bash
   mimi encrypt -p password -i filename.extension 
 
-  mimi decrypt -p password -i filename.extension.encrypted
+  mimi decrypt -p password -i filename.extension.mimi
 
 ```
 You can also supply an initialization vector using -v like so.  I believe that that is supposed to be more secure than without.
@@ -34,24 +34,46 @@ You can also supply an initialization vector using -v like so.  I believe that t
 ```bash
   mimi encrypt -p password -v vector -i filename.extension 
 
-  mimi decrypt -p password -v vector -i filename.extension.encrypted
+  mimi decrypt -p password -v vector -i filename.extension.mimi
 
 ```
 
 I have also added the ability to pipe data to and from and also redirect from mimi like so:
 
 ```bash
-  cat filename.extension | mimi encrypt -p password -O >> filename.extension.encrypted
+  cat filename.extension | mimi encrypt -p password -O >> filename.extension.mimi
 
-  cat filename.extension.encrypted | mimi decrypt -p password -O >> filename.extension
+  cat filename.extension.mimi | mimi decrypt -p password -O >> filename.extension
 
 ```
 
-The library can also take a readable stream and it returns the a stream that can pipe to a writeable stream, so you could take the stream that a web server provides and encrypt and directly pipe to s3.  I think that I have done this in other code, but I haven't looked at that code recently, so if you get code that does that working let me know.
+Here is an example of an express router for uploading directly to a server from mimi cli using the -u or --url option.  If you think that this should be handled differently, please feel free to let me know.
 
-If you are piping to stdout, you should be sure to use the vector options otherwise node.js will show a warning and it will be in the stdout.
+```bash 
+cat large_file.extension | mimi encrypt -p testtesttest -u http://localhost:3000/upload/large_file.extension.mimi
+```
 
-Strange, github didn't update when I pushed that.  Does a rebase not show up as the current version?
+```javavscript
+var express = require('express');
+var router = express.Router();
+var fs = require('fs');
+var path = require('path');
+
+router.post('/upload/:filename', function(req, res, next) {
+  var writeable = fs.createWriteStream(path.join(__dirname, '..', 'public', 'uploads', req.params.filename));
+  req.pipe(writeable);
+
+  req.on('end', function() {
+    res.json({success: true})
+  })
+});
+
+module.exports = router;
+```
+
+Right now, the code relies on you to input the correct parameters.  I hope that I will add some checks to ensure that a useful error message appears.  If you find that there is an error and you can figure out what the issue was, go ahead and try to add those validations yourself and make a pull request.  Thanks.
+
+
 
 Contributing
 ------------

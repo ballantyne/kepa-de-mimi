@@ -15,6 +15,7 @@ program
   .usage('command [options]')
   .option('-i, --input <input>', 'Input File')
   .option('-o, --output <output>', 'Output File')
+  .option('-u, --url <url>', 'URL')
   .option('-p, --password <password>', 'Password')
   .option('-v, --vector <vector>', 'Initialization Vector')
   .option('-a, --algorithm <algorithm>', 'Algorithm')
@@ -34,7 +35,7 @@ if (program.args[0] == 'encrypt') {
     if (program.stdout) {
       output = process.stdout;
     } else {
-      output = [program.input, '.encrypted'].join('');
+      output = [program.input, '.mimi'].join('');
     }
   } else {
     output = program.output;
@@ -45,7 +46,8 @@ if (program.args[0] == 'encrypt') {
     output: output, 
     password: program.password, 
     vector: program.vector, 
-    stdout: program.stdout
+    stdout: program.stdout,
+    url: program.url
   });
 }
 
@@ -61,7 +63,7 @@ if (program.args[0] == 'decrypt') {
     if (program.stdout) {
       output = process.stdout;
     } else {
-      output = program.input.replace('.encrypted', '');
+      output = program.input.replace('.mimi', '');
     }
   } else {
     output = program.output;
@@ -72,6 +74,7 @@ if (program.args[0] == 'decrypt') {
     output: output, 
     password: program.password, 
     vector: program.vector, 
-    stdout: program.stdout
+    stdout: program.stdout,
+    url: program.url
   });
 }

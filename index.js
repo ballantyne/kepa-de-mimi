@@ -1,18 +1,19 @@
-var path = require('path'),
-    crypto = require('crypto'),
-    algorithm = 'aes-256-ctr';
+var path               = require('path'),
+    crypto             = require('crypto'),
+    algorithm          = 'aes-256-ctr';
 
-var fs = require('fs');
-var zlib = require('zlib');
-var through = require('through');
+var fs                 = require('fs');
+var zlib               = require('zlib');
+var through            = require('through');
+var request            = require('request');
 
-var hashify = function(password, vector) {
+var hashify            = function(password, vector) {
   return crypto.createHmac('sha256', password)
     .update(vector)
     .digest('hex');
 }
 
-var logMessage = function(message) {
+var logMessage         = function(message) {
   if (process.env.NODE_ENV != 'test') {
     if (typeof message == 'string') {
       console.log(message);
@@ -32,7 +33,7 @@ var determineInputPath = function(filePath) {
   } 
 }
 
-var ensureOutputPath = function(filePath) {
+var ensureOutputPath   = function(filePath) {
   if (filePath.indexOf('/') == -1 || filePath.indexOf("\\") == -1) {
     return path.join(process.cwd(), filePath);
   } else {
@@ -41,9 +42,6 @@ var ensureOutputPath = function(filePath) {
 }
 
 module.exports.encrypt = function(options) {
-  
-  //console.log(JSON.stringify(options, null, 2));
-  
   var encrypt, readable, writeable;
   var zip = zlib.createGzip();
   
@@ -75,7 +73,7 @@ module.exports.encrypt = function(options) {
     writeable = options.output;
   } 
  
-  readable.pipe(zip).pipe(encrypt).pipe(writeable);
+  readable.pipe(zip).pipe(encrypt).pipe(stream);
   
   if (typeof options.output == 'string') {
     stream.pipe(writeable);
@@ -84,12 +82,15 @@ module.exports.encrypt = function(options) {
   if (options.stdout) {
     stream.pipe(process.stdout);
   }
+
+  if (options.url != undefined) {
+    console.log(options);
+    stream.pipe(request.post(options.url));
+  } 
   return stream;
 }
 
 module.exports.decrypt = function(options) {
-  //console.log(JSON.stringify(options, null, 2));
-  
   var decrypt, readable, writeable;
   var unzip = zlib.createGunzip();
   
@@ -130,7 +131,10 @@ module.exports.decrypt = function(options) {
   if (options.stdout) {
     stream.pipe(process.stdout);
   }
+
+
+  if (options.url != undefined) {
+    stream.pipe(request.post(options.url));
+  } 
   return stream;
 }
-
-
