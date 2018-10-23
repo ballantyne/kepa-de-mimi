@@ -59,7 +59,7 @@ var router = express.Router();
 var fs = require('fs');
 var path = require('path');
 
-router.post('/upload/api_key/:filename', function(req, res, next) {
+router.post('/upload/:api_key/:filename', function(req, res, next) {
   var writeable = fs.createWriteStream(path.join(__dirname, '..', 'public', 'uploads', req.params.filename));
   req.pipe(writeable);
 
