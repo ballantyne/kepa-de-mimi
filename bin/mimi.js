@@ -18,6 +18,7 @@ program
   .option('-u, --url <url>', 'URL')
   .option('-p, --password <password>', 'Password')
   .option('-v, --vector <vector>', 'Initialization Vector')
+  .option('-c, --cipher <cipher>', 'Cipher')
   .option('-a, --algorithm <algorithm>', 'Algorithm')
   .option('-O, --stdout', 'Pipe to Standard Output')
   .parse(process.argv);
@@ -47,7 +48,9 @@ if (program.args[0] == 'encrypt') {
     password: program.password, 
     vector: program.vector, 
     stdout: program.stdout,
-    url: program.url
+    url: program.url,
+    cipher: program.cipher,
+    algorithm: program.algorithm
   });
 }
 
@@ -75,6 +78,8 @@ if (program.args[0] == 'decrypt') {
     password: program.password, 
     vector: program.vector, 
     stdout: program.stdout,
-    url: program.url
+    url: program.url,
+    cipher: program.cipher,
+    algorithm: program.algorithm
   });
 }

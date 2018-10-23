@@ -1,6 +1,6 @@
 {
   "name": "kepa-de-mimi",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "streaming file encryption and decryption",
   "main": "index.js",
   "scripts": {

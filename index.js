@@ -1,13 +1,14 @@
 var path               = require('path'),
     crypto             = require('crypto'),
-    algorithm          = 'aes-256-ctr';
+    algorithm          = 'sha256',
+    cipher             = 'aes-256-ctr';
 
 var fs                 = require('fs');
 var zlib               = require('zlib');
 var through            = require('through');
 var request            = require('request');
 
-var hashify            = function(password, vector) {
+var hashify            = function(algo, password, vector) {
   return crypto.createHmac('sha256', password)
     .update(vector)
     .digest('hex');
@@ -53,12 +54,16 @@ module.exports.encrypt = function(options) {
     options.algorithm = algorithm;
   }
 
+  if (options.cipher == undefined) {
+    options.cipher = cipher;
+  }
+
   if (options.vector != undefined) {
-    options.vector = hashify(options.password, options.vector).slice(0, 16);
-    options.password = hashify(options.password, options.vector).slice(0, 32);
-    encrypt = crypto.createCipheriv(options.algorithm, options.password, options.vector);
+    options.vector = hashify(options.algorithm, options.password, options.vector).slice(0, 16);
+    options.password = hashify(options.algorithm, options.password, options.vector).slice(0, 32);
+    encrypt = crypto.createCipheriv(options.cipher, options.password, options.vector);
   } else {
-    encrypt = crypto.createCipher(options.algorithm, options.password);
+    encrypt = crypto.createCipher(options.cipher, options.password);
   }
   
   if (typeof options.input == 'string') {
@@ -84,7 +89,6 @@ module.exports.encrypt = function(options) {
   }
 
   if (options.url != undefined) {
-    console.log(options);
     stream.pipe(request.post(options.url));
   } 
   return stream;
@@ -102,12 +106,16 @@ module.exports.decrypt = function(options) {
     options.algorithm = algorithm;
   }
   
+  if (options.cipher == undefined) {
+    options.cipher = cipher;
+  }
+  
   if (options.vector != undefined) {
-    options.vector = hashify(options.password, options.vector).slice(0, 16);
-    options.password = hashify(options.password, options.vector).slice(0, 32);
-    decrypt = crypto.createDecipheriv(options.algorithm, options.password, options.vector);
+    options.vector = hashify(options.algorithm, options.password, options.vector).slice(0, 16);
+    options.password = hashify(options.algorithm, options.password, options.vector).slice(0, 32);
+    decrypt = crypto.createDecipheriv(options.cipher, options.password, options.vector);
   } else {
-    decrypt = crypto.createDecipher(options.algorithm, options.password);
+    decrypt = crypto.createDecipher(options.cipher, options.password);
   }
   
   if (typeof options.input == 'string') {
