@@ -6,7 +6,7 @@ var path               = require('path'),
 var fs                 = require('fs');
 var zlib               = require('zlib');
 var through            = require('through');
-var request            = require('request');
+var StreamingPost      = require(path.join(__dirname, 'lib', 'streaming_post'));
 
 var hashify            = function(algo, password, vector) {
   return crypto.createHmac('sha256', password)
@@ -42,6 +42,8 @@ var ensureOutputPath   = function(filePath) {
   }
 }
 
+
+
 module.exports.encrypt = function(options) {
   var encrypt, readable, writeable;
   var zip = zlib.createGzip();
@@ -71,7 +73,11 @@ module.exports.encrypt = function(options) {
   } else {
     var readable = options.input;
   }
- 
+
+  readable.on('end', function() {
+    //stream.end()
+  });
+
   if (typeof options.output == 'string') {
     writeable = fs.createWriteStream(ensureOutputPath(options.output));
   } else {
@@ -89,7 +95,8 @@ module.exports.encrypt = function(options) {
   }
 
   if (options.url != undefined) {
-    stream.pipe(request.post(options.url));
+    var upload = new StreamingPost({url: options.url});
+    stream.pipe(upload);
   } 
   return stream;
 }
@@ -124,6 +131,11 @@ module.exports.decrypt = function(options) {
     readable = options.input;
   } 
   
+  readable.on('end', function() {
+    //stream.end()
+  });
+
+  
   if (typeof options.output == 'string') {
     writeable = fs.createWriteStream(ensureOutputPath(options.output));
   } else {
@@ -142,7 +154,8 @@ module.exports.decrypt = function(options) {
 
 
   if (options.url != undefined) {
-    stream.pipe(request.post(options.url));
+    var upload = new StreamingPost({url: options.url});
+    stream.pipe(upload);
   } 
   return stream;
 }
