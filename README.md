@@ -50,7 +50,7 @@ I have also added the ability to pipe data to and from and also redirect from mi
 Here is an example of an express router for uploading directly to a server from mimi cli using the -u or --url option.  If you think that this should be handled differently, please feel free to let me know.
 
 ```bash 
-cat large_file.extension | mimi encrypt -p testtesttest -u http://localhost:3000/upload/a_really_long_api_key/large_file.extension.mimi
+cat large_file.extension | mimi encrypt -p password -u http://localhost:3000/upload/a_really_long_api_key/large_file.extension.mimi
 ```
 
 ```javavscript
