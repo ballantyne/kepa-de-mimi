@@ -73,7 +73,23 @@ module.exports = router;
 
 Right now, the code relies on you to input the correct parameters.  I hope that I will add some checks to ensure that a useful error message appears.  If you find that there is an error and you can figure out what the issue was, go ahead and try to add those validations yourself and make a pull request.  Thanks.
 
+Use -h to get a print out of the usage.
 
+```bash
+computer:Desktop user$ mimi -h
+Usage: mimi command [options]
+
+Options:
+  -V, --version                output the version number
+  -i, --input <input>          Input File
+  -o, --output <output>        Output File
+  -u, --url <url>              URL
+  -p, --password <password>    Password
+  -v, --vector <vector>        Initialization Vector
+  -a, --algorithm <algorithm>  Algorithm
+  -O, --stdout                 Pipe to Standard Output
+  -h, --help                   output usage information
+```
 
 Contributing
 ------------
