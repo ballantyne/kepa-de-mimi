@@ -19,7 +19,7 @@ program
   .option('-p, --password <password>', 'Password')
   .option('-v, --vector <vector>', 'Initialization Vector')
   .option('-c, --cipher <cipher>', 'Cipher')
-  .option('-a, --algorithm <algorithm>', 'Algorithm')
+  .option('-a, --algorithm <algorithm>', 'Hash Algorithm')
   .option('-O, --stdout', 'Pipe to Standard Output')
   .parse(process.argv);
 
@@ -66,7 +66,9 @@ if (program.args[0] == 'decrypt') {
     if (program.stdout) {
       output = process.stdout;
     } else {
-      output = program.input.replace('.mimi', '');
+      if (typeof program.input == 'string') {
+        output = program.input.replace('.mimi', '');
+      }
     }
   } else {
     output = program.output;

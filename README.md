@@ -7,7 +7,6 @@ Trying to move the documentation to a [wiki](https://github.com/ballantyne/kepa-
 
 ```bash
 npm install kepa-de-mimi -g
-
 ```
 or on mac
 ```bash
