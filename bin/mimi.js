@@ -73,7 +73,7 @@ if (program.args[0] == 'decrypt') {
   } else {
     output = program.output;
   }
-  
+
   Mimi.decrypt({
     input: input, 
     output: output, 

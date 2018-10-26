@@ -1,4 +1,5 @@
 var path               = require('path'),
+    os                 = require('os'),
     crypto             = require('crypto'),
     algorithm          = 'sha256',
     cipher             = 'aes-256-ctr';
@@ -24,6 +25,10 @@ var logMessage         = function(message) {
   }
 }
 
+var insideHomeDirectory = function(filePath) {
+  return path.join(os.homedir(), filePath.slice(1, filePath.length));
+}
+
 var determineInputPath = function(filePath) {
   if (fs.existsSync(filePath)) {
     return filePath;
@@ -31,12 +36,16 @@ var determineInputPath = function(filePath) {
     return path.join(process.cwd(), filePath);
   } else if (fs.existsSync(filePath)) {
     return filePath;
+  } else if (filePath.indexOf('~') == 0) {
+    return insideHomeDirectory(filePath);
   } 
 }
 
 var ensureOutputPath   = function(filePath) {
-  if (filePath.indexOf('/') == -1 || filePath.indexOf("\\") == -1) {
+  if ((filePath.indexOf('/') != -1 || filePath.indexOf("\\") != -1) && (filePath.indexOf('/') != 0 && filePath.indexOf("\\") != 0)) {
     return path.join(process.cwd(), filePath);
+  } else if (filePath.indexOf('~') == 0) {
+    return insideHomeDirectory(filePath);
   } else {
     return filePath;
   }
