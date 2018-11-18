@@ -78,6 +78,10 @@ License
 
 It is free software, and may be redistributed under the terms specified in the MIT-LICENSE file.
 
+Inspiration
+-------
+I found [this blog post](https://lollyrock.com/articles/nodejs-encryption/) and decided to use the idea to make a useful library.  Not sure how much you need to change a piece of code until it is considered an original piece of work.  I remember in graphic design if it is 30% different then it is different enough.  Probably in code land each and every line needs to be accounted for. [This](https://gist.github.com/chris-rock/335f92742b497256982a#file-crypto-stream-js) is the source of the inspiration for parts of [this code](https://github.com/ballantyne/kepa-de-mimi/blob/master/index.js).  Not sure if this is considered a proper citation, but the code isn't exactly the same anyway.
+
 Copyright 
 -------
 © 2018 Scott Ballantyne. See LICENSE for details.
