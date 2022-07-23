@@ -1,0 +1,6 @@
+version=1.0.48
+
+# Prefer source repositories, even if this example uses npm registry
+opts="searchmode=plain,pgpmode=none" \
+ https://registry.npmjs.org/kepa-de-mimi \
+ https://registry.npmjs.org/kepa-de-mimi/-/kepa-de-mimi-(\d[\d\.]*)@ARCHIVE_EXT@ group

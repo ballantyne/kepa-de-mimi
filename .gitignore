@@ -1,0 +1,5 @@
+.DS_Store
+node_modules/*
+test/data/*.result
+test/data/*.encrypted
+bin/concat.js
